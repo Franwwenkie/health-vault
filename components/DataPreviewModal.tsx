@@ -50,19 +50,23 @@ export default function DataPreviewModal({ isOpen, onClose, data, onUploadToChai
         dataHash: `0x${Math.random().toString(16).substr(2, 64)}`, // Random data hash
       };
 
-      setUploadStatus("Encrypting health data...");
-      setUploadProgress(25);
+      setUploadStatus("🔐 Encrypting health data...");
+      setUploadProgress(10);
       await new Promise(resolve => setTimeout(resolve, 1000));
 
-      setUploadStatus("Uploading to blockchain...");
-      setUploadProgress(50);
+      setUploadStatus("📤 Preparing transaction...");
+      setUploadProgress(20);
+      await new Promise(resolve => setTimeout(resolve, 1000));
+
+      setUploadStatus("💳 Please sign the transaction in your wallet...");
+      setUploadProgress(30);
       
       // Call the actual contract function
       const result = await uploadHealthDataToContract(healthData);
       
       if (result.success) {
-        setUploadStatus("Transaction submitted! Waiting for confirmation...");
-        setUploadProgress(75);
+        setUploadStatus("⏳ Transaction submitted! Waiting for blockchain confirmation...");
+        setUploadProgress(90);
         
         // Store transaction result and show success modal
         setTransactionResult(result);
@@ -152,17 +156,25 @@ export default function DataPreviewModal({ isOpen, onClose, data, onUploadToChai
 
         {/* Upload Progress */}
         {isUploading && (
-          <div className="mb-6">
-            <div className="flex justify-between text-sm mb-2">
-              <span className="text-slate-300">{uploadStatus}</span>
-              <span className="text-slate-400">{Math.round(uploadProgress)}%</span>
+          <div className="mb-6 p-4 bg-slate-800/50 rounded-lg border border-slate-600">
+            <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center space-x-2">
+                <div className="animate-spin rounded-full h-4 w-4 border-2 border-emerald-500 border-t-transparent"></div>
+                <span className="text-slate-200 font-medium">{uploadStatus}</span>
+              </div>
+              <span className="text-emerald-400 font-semibold">{Math.round(uploadProgress)}%</span>
             </div>
-            <div className="w-full bg-slate-700 rounded-full h-3">
+            <div className="w-full bg-slate-700 rounded-full h-4">
               <div 
-                className="h-3 rounded-full bg-gradient-to-r from-emerald-500 to-blue-500 transition-all duration-300"
+                className="h-4 rounded-full bg-gradient-to-r from-emerald-500 to-blue-500 transition-all duration-500 ease-out"
                 style={{ width: `${uploadProgress}%` }}
               ></div>
             </div>
+            {uploadProgress < 90 && (
+              <div className="mt-2 text-xs text-slate-400 text-center">
+                Please keep this window open and check your wallet for signature requests
+              </div>
+            )}
           </div>
         )}
 

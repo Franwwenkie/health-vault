@@ -118,15 +118,21 @@ export function useHealthVault() {
       // Wait for the transaction to be submitted and get the hash
       // We need to wait for uploadTxData to be populated
       let attempts = 0;
-      const maxAttempts = 30; // 30 seconds timeout
+      const maxAttempts = 120; // 120 seconds timeout (2 minutes)
       
+      console.log("Waiting for user to sign transaction...");
       while (!uploadTxData && attempts < maxAttempts) {
         await new Promise(resolve => setTimeout(resolve, 1000));
         attempts++;
+        
+        // Log progress every 10 seconds
+        if (attempts % 10 === 0) {
+          console.log(`Still waiting for signature... ${attempts}s elapsed`);
+        }
       }
 
       if (!uploadTxData) {
-        throw new Error("Transaction submission timeout - please try again");
+        throw new Error("Transaction signature timeout - please sign the transaction in your wallet");
       }
 
       // Now wait for the transaction to be confirmed
