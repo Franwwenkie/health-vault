@@ -13,7 +13,7 @@ export default function Dashboard() {
       <Navigation title="Health Vault" subtitle="Dashboard" />
 
       {/* Main Content */}
-      <div className="container mx-auto px-4 py-8 pt-24">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 pt-24">
         {/* Dashboard Header */}
         <div className="text-center mb-8 fade-in">
           <h1 className="health-vault-title text-3xl md:text-4xl mb-4">

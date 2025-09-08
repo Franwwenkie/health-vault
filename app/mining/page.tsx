@@ -8,7 +8,7 @@ export default function MiningPage() {
     <div className="min-h-screen health-vault-bg">
       <Navigation />
       
-      <main className="container mx-auto px-4 py-8 pt-24">
+      <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 pt-24">
         <HealthMiningLeaderboard />
       </main>
     </div>

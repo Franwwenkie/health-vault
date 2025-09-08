@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { useAccount, useContractRead, useWriteContract, useWaitForTransactionReceipt } from "wagmi";
 import { Address } from "viem";
+import { usePublicClient } from "wagmi";
 import { HEALTH_VAULT_ABI, HEALTH_VAULT_ADDRESS, getContractConfig, type UserHealthData, type UploadHealthDataParams } from "@/lib/contract";
 import { generateDataHash, validateHealthData, type HealthData } from "@/lib/fhe-utils";
 
@@ -9,6 +10,7 @@ import { generateDataHash, validateHealthData, type HealthData } from "@/lib/fhe
  */
 export function useHealthVault() {
   const { address, isConnected } = useAccount();
+  const publicClient = usePublicClient();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -73,6 +75,8 @@ export function useHealthVault() {
     hash: revokeTxData,
   });
 
+  // We'll use viem's waitForTransactionReceipt directly
+
   // Upload health data function
   const uploadHealthDataToContract = useCallback(async (healthData: HealthData) => {
     if (!isConnected || !address) {
@@ -106,9 +110,22 @@ export function useHealthVault() {
         ],
       });
 
-      // Return the transaction hash immediately
-      // The transaction status will be tracked by the useWaitForTransactionReceipt hook
-      return { success: true, hash: hash };
+      // Wait for transaction receipt to confirm it was successful
+      const receipt = await publicClient.waitForTransactionReceipt({
+        hash: hash,
+        timeout: 60000, // 60 seconds timeout
+      });
+
+      if (receipt.status === 'success') {
+        return { 
+          success: true, 
+          hash: hash,
+          blockNumber: receipt.blockNumber.toString(),
+          gasUsed: receipt.gasUsed.toString()
+        };
+      } else {
+        throw new Error("Transaction failed on blockchain");
+      }
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : "Unknown error occurred";
       setError(errorMessage);
@@ -116,7 +133,7 @@ export function useHealthVault() {
     } finally {
       setIsLoading(false);
     }
-  }, [isConnected, address, writeContract]);
+  }, [isConnected, address, writeContract, publicClient]);
 
   // Grant sharing permission function
   const grantPermission = useCallback(async (recipient: Address) => {

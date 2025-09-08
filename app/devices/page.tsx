@@ -9,7 +9,7 @@ export default function Devices() {
     <main className="health-vault-container">
       <Navigation title="Health Vault" subtitle="Device Management" />
 
-      <div className="container mx-auto px-4 py-8 pt-24">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 pt-24">
         {/* Page Header */}
         <div className="text-center mb-12 fade-in">
           <h1 className="health-vault-title text-4xl md:text-5xl mb-4">

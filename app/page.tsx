@@ -19,7 +19,7 @@ export default function Home() {
         </div>
 
         <div className="relative z-10 text-center py-20">
-          <div className="container mx-auto px-4">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <div className="max-w-4xl mx-auto">
               <div className="inline-flex items-center space-x-2 bg-emerald-500/10 border border-emerald-500/20 rounded-full px-4 py-2 mb-8">
                 <span className="text-emerald-400">🔒</span>
@@ -168,7 +168,7 @@ export default function Home() {
 
       {/* Footer */}
       <footer className="health-vault-section bg-slate-900/50 border-t border-slate-700/50">
-        <div className="container mx-auto px-4 py-12">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             {/* Brand Section */}
             <div className="md:col-span-2">

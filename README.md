@@ -57,7 +57,7 @@ A confidential health data sharing platform built with **ZAMA FHE (Fully Homomor
    
    Update `.env.local` with your configuration:
    ```env
-   NEXT_PUBLIC_HEALTH_VAULT_ADDRESS=0x07BF9B17e1eb2bAA4b374F01DE7f9e58caF00879
+   NEXT_PUBLIC_HEALTH_VAULT_ADDRESS=0xB2b6750C4C97d2599C477aF20D32063781C5A352
    NEXT_PUBLIC_CHAIN_ID=11155111
    NEXT_PUBLIC_NETWORK=sepolia
    NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID=your_project_id
@@ -214,7 +214,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 - **Live Demo**: [Coming Soon]
 - **Documentation**: [API Reference](./API_REFERENCE.md)
-- **Smart Contract**: [Etherscan](https://sepolia.etherscan.io/address/0x07BF9B17e1eb2bAA4b374F01DE7f9e58caF00879)
+- **Smart Contract**: [Etherscan](https://sepolia.etherscan.io/address/0xB2b6750C4C97d2599C477aF20D32063781C5A352)
 - **Issues**: [GitHub Issues](https://github.com/Franwwenkie/health-vault/issues)
 
 ## 📞 Support
