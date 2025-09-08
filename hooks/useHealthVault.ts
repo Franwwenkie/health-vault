@@ -115,13 +115,40 @@ export function useHealthVault() {
         ],
       });
 
-      // Return success immediately - the useWaitForTransactionReceipt hook will handle the waiting
-      return { 
-        success: true, 
-        hash: uploadTxData || "pending",
-        blockNumber: "pending",
-        gasUsed: "pending"
-      };
+      // Wait for the transaction to be submitted and get the hash
+      // We need to wait for uploadTxData to be populated
+      let attempts = 0;
+      const maxAttempts = 30; // 30 seconds timeout
+      
+      while (!uploadTxData && attempts < maxAttempts) {
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        attempts++;
+      }
+
+      if (!uploadTxData) {
+        throw new Error("Transaction submission timeout - please try again");
+      }
+
+      // Now wait for the transaction to be confirmed
+      if (!publicClient) {
+        throw new Error("Public client not available");
+      }
+
+      const receipt = await publicClient.waitForTransactionReceipt({
+        hash: uploadTxData,
+        timeout: 60000, // 60 seconds timeout
+      });
+
+      if (receipt.status === 'success') {
+        return { 
+          success: true, 
+          hash: uploadTxData,
+          blockNumber: receipt.blockNumber.toString(),
+          gasUsed: receipt.gasUsed.toString()
+        };
+      } else {
+        throw new Error("Transaction failed on blockchain");
+      }
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : "Unknown error occurred";
       setError(errorMessage);
