@@ -210,6 +210,19 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - **FHEVM Community**: For excellent documentation and support
 - **Ethereum Foundation**: For the robust blockchain infrastructure
 
+## 🎥 Demo Video
+
+Watch our comprehensive demo showcasing the Health Vault platform:
+
+[![Health Vault Demo](https://img.shields.io/badge/📹_Watch_Demo-17MB_MP4-red?style=for-the-badge)](./demo_compressed.mp4)
+
+**Demo Highlights:**
+- 🔗 Smart device integration and data sync
+- 📊 Real-time health data dashboard
+- ⛓️ Blockchain upload with FHE encryption
+- ⛏️ Health data mining and leaderboard
+- 🔐 Privacy-preserving analytics
+
 ## 🔗 Links
 
 - **Live Demo**: [Coming Soon]
