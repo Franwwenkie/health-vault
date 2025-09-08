@@ -96,6 +96,11 @@ export function useHealthVault() {
       // Generate data hash
       const dataHash = generateDataHash(healthData);
 
+      // Validate health data before processing
+      if (healthData.healthScore === undefined || healthData.riskFactor === undefined || healthData.ageGroup === undefined) {
+        throw new Error("Invalid health data: missing required fields");
+      }
+
       // Write contract
       const hash = await writeContract({
         address: HEALTH_VAULT_ADDRESS,
@@ -109,6 +114,16 @@ export function useHealthVault() {
           "0x0000000000000000000000000000000000000000000000000000000000000000" as `0x${string}` // inputProof placeholder
         ],
       });
+
+      // Validate transaction hash
+      if (!hash) {
+        throw new Error("Transaction failed: no hash returned");
+      }
+
+      // Validate public client
+      if (!publicClient) {
+        throw new Error("Public client not available");
+      }
 
       // Wait for transaction receipt to confirm it was successful
       const receipt = await publicClient.waitForTransactionReceipt({
