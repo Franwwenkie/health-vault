@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { useHealthVault } from "@/hooks/useHealthVault";
 import { getHealthScoreDescription, getRiskLevelDescription, getAgeGroupDescription } from "@/lib/fhe-utils";
+import ClientOnly from "./ClientOnly";
 
 export default function HealthVaultDashboard() {
   const [activeTab, setActiveTab] = useState("overview");
@@ -47,7 +48,8 @@ export default function HealthVaultDashboard() {
   };
 
   return (
-    <div className="health-vault-dashboard">
+    <ClientOnly>
+      <div className="health-vault-dashboard">
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-2xl font-bold text-white health-vault-heartbeat">
           📊 Dashboard
@@ -318,6 +320,7 @@ export default function HealthVaultDashboard() {
           </div>
         </div>
       )}
-    </div>
+      </div>
+    </ClientOnly>
   );
 }
