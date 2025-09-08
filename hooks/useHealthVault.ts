@@ -56,7 +56,7 @@ export function useHealthVault() {
   });
 
   // Write contract functions
-  const { writeContract, data: uploadTxData } = useWriteContract();
+  const { writeContract, data: uploadTxData, isPending: isWritePending } = useWriteContract();
   const { writeContract: grantWriteContract, data: grantTxData } = useWriteContract();
   const { writeContract: revokeWriteContract, data: revokeTxData } = useWriteContract();
 
@@ -101,8 +101,8 @@ export function useHealthVault() {
         throw new Error("Invalid health data: missing required fields");
       }
 
-      // Write contract
-      const hash = await writeContract({
+      // Write contract - this will trigger wallet signature
+      writeContract({
         address: HEALTH_VAULT_ADDRESS,
         abi: HEALTH_VAULT_ABI,
         functionName: "uploadHealthData",
@@ -115,32 +115,13 @@ export function useHealthVault() {
         ],
       });
 
-      // Validate transaction hash
-      if (!hash) {
-        throw new Error("Transaction failed: no hash returned");
-      }
-
-      // Validate public client
-      if (!publicClient) {
-        throw new Error("Public client not available");
-      }
-
-      // Wait for transaction receipt to confirm it was successful
-      const receipt = await publicClient.waitForTransactionReceipt({
-        hash: hash,
-        timeout: 60000, // 60 seconds timeout
-      });
-
-      if (receipt.status === 'success') {
-        return { 
-          success: true, 
-          hash: hash,
-          blockNumber: receipt.blockNumber.toString(),
-          gasUsed: receipt.gasUsed.toString()
-        };
-      } else {
-        throw new Error("Transaction failed on blockchain");
-      }
+      // Return success immediately - the useWaitForTransactionReceipt hook will handle the waiting
+      return { 
+        success: true, 
+        hash: uploadTxData || "pending",
+        blockNumber: "pending",
+        gasUsed: "pending"
+      };
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : "Unknown error occurred";
       setError(errorMessage);

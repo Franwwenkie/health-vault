@@ -57,18 +57,12 @@ export default function DataPreviewModal({ isOpen, onClose, data, onUploadToChai
       setUploadStatus("Uploading to blockchain...");
       setUploadProgress(50);
       
-      // Call the actual contract function and wait for transaction completion
+      // Call the actual contract function
       const result = await uploadHealthDataToContract(healthData);
       
-      setUploadStatus("Waiting for transaction confirmation...");
-      setUploadProgress(75);
-      
-      // Wait for transaction to be confirmed on blockchain
-      // The useHealthVault hook will handle the actual waiting
-      // We need to check if the transaction was successful
-      if (result.success && result.hash) {
-        setUploadStatus("Transaction confirmed! Data is now on-chain.");
-        setUploadProgress(100);
+      if (result.success) {
+        setUploadStatus("Transaction submitted! Waiting for confirmation...");
+        setUploadProgress(75);
         
         // Store transaction result and show success modal
         setTransactionResult(result);
